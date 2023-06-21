@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Gravity</title>
+        <script src="gravity.js"></script>
+    </head>
+    <body style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">
+        <h1>Gravity game</h1>
+        <p>This is a game that helps with memorizing terms while studying. In the boxes below, enter your terms and definitions, each on a new line. Then, click on "Save" and then "Start game"</p>
+        <div style="display: inline-flex; flex-direction: column;">
+            <h2>Definitions</h2>
+            <textarea id="definitions" rows="10" cols="85" style="resize: none;">Enter your definitions here...</textarea>
+        </div>
+        <div style="display: inline-flex; flex-direction: column;">
+            <h2>Terms</h2>
+            <textarea id="terms" rows="10" cols="85" style="resize: none;">Enter your terms here...</textarea>
+        </div>
+        <br>
+        <button onclick="getTermsAndDefs()">Save</button>
+        <a href="file:///Users/1013708/Games/Gravity_game/gravity.html">
+            <button>Start game</button>
+        </a>
+    </body>
+</html>
