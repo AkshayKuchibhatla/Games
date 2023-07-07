@@ -2,20 +2,34 @@
 <html>
     <head>
         <title>Gravity</title>
-        <script src="gravity.js"></script>
+        <script src="gravityIndex.js"></script>
+        <link rel="stylesheet" href="index.css">
+        <link rel="icon" type="image/x-icon" href="icon.jpeg">
     </head>
-    <body style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">
+    <body>
         <h1>Gravity game</h1>
-        <p>This is a game that helps with memorizing terms while studying. In the boxes below, enter your terms and definitions, each on a new line. Then, click on "Save" and then "Start game"</p>
-        <div style="display: inline-flex; flex-direction: column;">
-            <h2>Definitions</h2>
-            <textarea id="definitions" rows="10" cols="85" style="resize: none;">Enter your definitions here...</textarea>
-        </div>
-        <div style="display: inline-flex; flex-direction: column;">
-            <h2>Terms</h2>
-            <textarea id="terms" rows="10" cols="85" style="resize: none;">Enter your terms here...</textarea>
-        </div>
+        <p>This is a game that helps with memorizing terms while studying. In the boxes below, enter your terms and definitions, each on a new row. 
+            Then, click on "Save" and then "Start game"</p>
+
+        <table id="pairsTable">
+            <thead>
+                <th>Terms</th>
+                <th>Definitions</th>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><textarea class="term">Enter term here...</textarea></td>
+                    <td><textarea class="definition">Enter definition here...</textarea></td>
+                </tr>
+            </tbody>
+        </table>
         <br>
+        <button class="rowButton" style="float: left;" onclick="subtractRow()">-</button>
+        <button class="rowButton" style="float: right;" onclick="addRow()">+</button>
+        <br>
+        <br>
+        <br>
+        <hr>
         <button onclick="getTermsAndDefs()">Save</button>
         <a href="file:///Users/1013708/Games/Gravity_game/gravity.html">
             <button>Start game</button>

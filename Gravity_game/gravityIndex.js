@@ -1,25 +1,27 @@
-var termIndex = 0;
+/*
+===========================================================================
+=============================INTRO PAGE CODE===============================
+===========================================================================
+*/
 
-/* This function gets the terms and definitions inputted into the boxes when 
+/* This function gets the terms and definitions inputted into the table when 
 "Save" is clicked. */
 function getTermsAndDefs() {
-
     sessionStorage.clear();
-    /* We start off with the raw data that we get from 
-    the user, then slice it wherever there's a new line:*/
-    var rawTerms = document.getElementById('terms').value;
-    var rawDefs = document.getElementById('definitions').value;
-    var termsList = rawTerms.split(/\n/);
-    var defsList = rawDefs.split(/\n/);
 
-    /* Now we have 2 lists, but one is longer than the 
-    other. So, we make the loger one equal in length to
-    the shorter one by deleting extra elements: */
-    if (termsList.length > defsList.length) {
-        termsList = termsList.slice(0, defsList.length);
-    } 
-    if (termsList.length < defsList.length) {
-        defsList = defsList.slice(0, termsList.length);
+    /*First, we have to get all the textareas labeled for terms
+    and definitions. Then, we push their contents into list of 
+    terms and their respective definitions.*/
+    var termNodes = document.getElementsByClassName("term");
+    var termsList = [];
+    for (var j = 0; j < termNodes.length; j++) {
+        termsList.push(termNodes[j].value);
+    }
+
+    var defNodes = document.getElementsByClassName("definition");
+    var defsList = [];
+    for (var i = 0; i < defNodes.length; i++) {
+        defsList.push(defNodes[i].value);
     }
 
     /* Then we console.log the lists to make sure they 
@@ -30,6 +32,45 @@ function getTermsAndDefs() {
     sessionStorage.setItem("definitions", defsList);
 }
 
+function addRow() {
+    var pairsTableBody = document.getElementById("pairsTable")
+    .getElementsByTagName('tbody')[0];
+    var newRow = document.createElement('tr');
+    pairsTableBody.appendChild(newRow);
+
+    var termCell = document.createElement('td');
+    var defCell = document.createElement('td');
+    newRow.appendChild(termCell);
+    newRow.appendChild(defCell);
+    
+    var termTextArea = document.createElement('textarea');
+    var defTextArea = document.createElement('textarea');
+    termCell.appendChild(termTextArea);
+    defCell.appendChild(defTextArea);
+    termTextArea.className = "term";
+    defTextArea.className = "definition";
+}
+
+function subtractRow() {
+    var pairsTableBody = document.getElementById("pairsTable")
+    .getElementsByTagName('tbody')[0];
+    var children = pairsTableBody.getElementsByTagName("tr");
+    var child = children[children.length-1];
+    pairsTableBody.removeChild(child);
+}
+
+/*
+================================================================================
+==================================GAME CODE=====================================
+================================================================================
+*/
+
+/*
+=========================
+=====RETRIEVE ANSWER=====
+=========================
+*/
+
 function retrieveAnswer(event) {
     if (event.key == "Enter") {
         event.preventDefault();
@@ -39,6 +80,12 @@ function retrieveAnswer(event) {
         console.log(myGameArea.currentAnswer);
     }
 }
+
+/*
+===================
+=====GAME AREA=====
+===================
+*/
 
 // The game area is an object that can be initialized and cleared:
 var myGameArea = {
@@ -103,6 +150,12 @@ var myGameArea = {
     }
 }
 
+/*
+===================
+=====ASTEROIDS=====
+===================
+*/
+
 // Now we need a function to render the falling asteroids:
 function drawAsteroid(context, radius, x, y, text, color) {
     // First, we get some variables sorted out:
@@ -110,6 +163,7 @@ function drawAsteroid(context, radius, x, y, text, color) {
     this.x = x;
     this.y = y;
     this.text = text;
+    this.termIndex = Math.floor(Math.random() * myGameArea.pairKeys.length);
 
     /* Next, we draw the circle according to the 
     center coordinates, fill color and text given.
@@ -149,10 +203,16 @@ function drawAsteroid(context, radius, x, y, text, color) {
         this.y = 0;
         this.x = Math.floor(Math.random() * (481)) + 60;
         myGameArea.fallSpeed = 1;
-        termIndex = Math.floor(Math.random() * myGameArea.pairKeys.length);
-        this.text = myGameArea.pairs[myGameArea.pairKeys[termIndex]];
+        this.termIndex = Math.floor(Math.random() * myGameArea.pairKeys.length);
+        this.text = myGameArea.pairs[myGameArea.pairKeys[this.termIndex]];
     }
 }
+
+/*
+====================
+=====START GAME=====
+====================
+*/
 
 // This function starts the game by rendering the area:
 function startGame() {
@@ -166,16 +226,21 @@ function startGame() {
         "black"
     );
     
-    termIndex = Math.floor(Math.random() * myGameArea.pairKeys.length);
     asteroid1 = new drawAsteroid(
         myGameArea.context, 
         50, 
         Math.floor(Math.random() * (481)) + 60, 
         -50, 
-        myGameArea.defsList[termIndex], 
+        myGameArea.defsList[0], 
         "green"
     );
 }
+
+/*
+===================
+=====GAME LOOP=====
+===================
+*/
 
 // This function will be called by myGameArea to update the page 
 // every 20 milliseconds:
@@ -189,7 +254,7 @@ function updateGameArea() {
         myGameArea.addFail();
     }
 
-    if (myGameArea.currentAnswer == myGameArea.pairKeys[termIndex]) {
+    if (myGameArea.currentAnswer == myGameArea.pairKeys[asteroid1.termIndex]) {
         asteroid1.reset();
         myGameArea.addScore();
         myGameArea.currentAnswer = "";
